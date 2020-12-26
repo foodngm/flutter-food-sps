@@ -1,55 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:food_ngm/src/models/category.dart';
+import 'package:food_ngm/src/widgets/loading.dart';
+import 'package:transparent_image/transparent_image.dart';
 
-import '../commons.dart';
+import '../helpers/style.dart';
 import 'custom_text.dart';
 
-List<Category> categoriesList = [
-  Category(name: "สลัด", image: "food-sps.png"),
-  Category(name: "สเต็ก", image: "food-sps.png"),
-  Category(name: "ฟาสฟู้ด", image: "food-sps.png"),
-  Category(name: "ของหวาน", image: "food-sps.png"),
-  Category(name: "อาหารทะเล", image: "food-sps.png"),
-  Category(name: "เบียร์", image: "food-sps.png"),
-];
+class CategoryWidget extends StatelessWidget {
+  final CategoryModel category;
 
-class Categories extends StatelessWidget {
+  const CategoryWidget({Key key, this.category}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categoriesList.length,
-        itemBuilder: (_, _index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Container(
-                    decoration: BoxDecoration(color: white, boxShadow: [
-                      BoxShadow(
-                          color: red, offset: Offset(4, 6), blurRadius: 20)
-                    ]),
-                    child: Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Image.asset(
-                        "images/${categoriesList[_index].image}",
-                        width: 50,
-                      ),
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: 140,
+            height: 160,
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(child: Align(
+                      alignment: Alignment.center,
+                      child: Loading(),
                     )),
-                SizedBox(
-                  height: 5,
+                    Center(
+                      child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: category.image),
+                    )
+                  ],
+                )),
+          ),
+
+          Container(
+            width: 140,
+            height: 160,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
-                CustomText(
-                  text: categoriesList[_index].name,
-                  size: 14,
-                  color: black,
-                )
-              ],
-            ),
-          );
-        },
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+
+                )),
+          ),
+
+          Positioned.fill(
+              child: Align(
+                  alignment: Alignment.center,
+                  child: CustomText(text: category.name, color: white, size: 26, weight: FontWeight.w300,)))
+        ],
       ),
     );
   }

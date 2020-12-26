@@ -1,11 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_ngm/src/helpers/screen_navigation.dart';
-import 'package:food_ngm/src/screens/home.dart';
+import 'package:food_ngm/src/helpers/style.dart';
+import 'package:food_ngm/src/provider/category.dart';
+import 'package:food_ngm/src/provider/product.dart';
+import 'package:food_ngm/src/provider/restaurant.dart';
+import 'package:food_ngm/src/provider/user.dart';
+import 'package:food_ngm/src/screens/login.dart';
 import 'package:food_ngm/src/widgets/custom_text.dart';
+import 'package:food_ngm/src/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
-import '../commons.dart';
-import 'login.dart';
+import 'home.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -15,18 +20,17 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _key = GlobalKey<ScaffoldState>();
 
-  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-
-    TextEditingController email = TextEditingController();
-    TextEditingController password = TextEditingController();
- //   TextEditingController name = TextEditingController();
+    final authProvider = Provider.of<UserProvider>(context);
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+    final restaurantProvider = Provider.of<RestaurantProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
       key: _key,
       backgroundColor: white,
-      body:  SingleChildScrollView(
+      body: authProvider.status == Status.Authenticating? Loading() : SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -36,33 +40,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset("images/food-sps.png", width: 100, height: 100,),
+                Image.asset("images/logo-sps.png", width: 100, height: 100,),
               ],
             ),
 
             SizedBox(
               height: 40,
             ),
-
-          /*  Padding(
-              padding: const EdgeInsets.all(12),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: grey),
-                    borderRadius: BorderRadius.circular(15)
-                ),
-                child: Padding(padding: EdgeInsets.only(left: 10),
-                  child: TextFormField(
-                    controller: name,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Username",
-                        icon: Icon(Icons.person)
-                    ),
-                  ),),
-              ),
-            ),
-  */
 
             Padding(
               padding: const EdgeInsets.all(12),
@@ -73,7 +57,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 child: Padding(padding: EdgeInsets.only(left: 10),
                   child: TextFormField(
-                    controller: email,
+                    controller: authProvider.name,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Username",
+                        icon: Icon(Icons.person)
+                    ),
+                  ),),
+              ),
+            ),
+
+
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: grey),
+                    borderRadius: BorderRadius.circular(15)
+                ),
+                child: Padding(padding: EdgeInsets.only(left: 10),
+                  child: TextFormField(
+                    controller: authProvider.email,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Emails",
@@ -92,7 +96,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 child: Padding(padding: EdgeInsets.only(left: 10),
                   child: TextFormField(
-                    controller: password,
+                    controller: authProvider.password,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Password",
@@ -106,27 +110,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               padding: const EdgeInsets.all(10),
               child: GestureDetector(
                 onTap: ()async{
+                  print("BTN CLICKED!!!!");
+                  print("BTN CLICKED!!!!");
+                  print("BTN CLICKED!!!!");
+                  print("BTN CLICKED!!!!");
+                  print("BTN CLICKED!!!!");
+                  print("BTN CLICKED!!!!");
 
-                  print("BTN CLICKED REG !!!!");
-                  print(email.text.trim());
-                  print(password.text.trim());
-                  try {
-                    final newUser = await _auth.createUserWithEmailAndPassword(email: email.text.trim(), password: password.text.trim());
-                    if (newUser != null) {
-                      changeScreenReplacement(context, LoginScreen());
-                    }
+                  if(!await authProvider.signUp()){
+                    _key.currentState.showSnackBar(
+                        SnackBar(content: Text("Resgistration failed!"))
+                    );
+                    return;
                   }
-                  on FirebaseAuthException catch (e) {
-                    if (e.code == 'weak-password') {
-                      print('The password provided is too weak.');
-                    } else if (e.code == 'email-already-in-use') {
-                      print('The account already exists for that email.');
-                    }
-                  }
-                  catch (e) {
-                    print(e);
-                  }
-
+                  categoryProvider.loadCategories();
+                  restaurantProvider.loadSingleRestaurant();
+                  productProvider.loadProducts();
+                  authProvider.clearController();
+                  changeScreenReplacement(context, Home());
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -152,7 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CustomText(text: "login", size: 20,),
+                  CustomText(text: "login here here", size: 20,),
                 ],
               ),
             ),
@@ -165,6 +166,4 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
-
-
 }

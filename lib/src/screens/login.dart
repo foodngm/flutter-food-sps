@@ -1,11 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_ngm/src/helpers/screen_navigation.dart';
+import 'package:food_ngm/src/helpers/style.dart';
+import 'package:food_ngm/src/provider/category.dart';
+import 'package:food_ngm/src/provider/product.dart';
+import 'package:food_ngm/src/provider/restaurant.dart';
+import 'package:food_ngm/src/provider/user.dart';
 import 'package:food_ngm/src/screens/home.dart';
 import 'package:food_ngm/src/screens/registration.dart';
 import 'package:food_ngm/src/widgets/custom_text.dart';
-
-import '../commons.dart';
+import 'package:food_ngm/src/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,18 +18,18 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _key = GlobalKey<ScaffoldState>();
-  final _auth = FirebaseAuth.instance;
-
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<UserProvider>(context);
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+    final restaurantProvider = Provider.of<RestaurantProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
       key: _key,
-      backgroundColor: Colors.purple[100],
-      body : SingleChildScrollView(
+      backgroundColor: white,
+      body: authProvider.status == Status.Authenticating? Loading() : SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -35,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset("images/logo-sps.jpg", width: 200, height: 200,),
+                Image.asset("images/logo-sps.png", width: 120, height: 120,),
               ],
             ),
 
@@ -51,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                ),
                child: Padding(padding: EdgeInsets.only(left: 10),
                child: TextFormField(
-                 controller: email,
+                 controller: authProvider.email,
                  decoration: InputDecoration(
                      border: InputBorder.none,
                      hintText: "Email",
@@ -70,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: Padding(padding: EdgeInsets.only(left: 10),
                   child: TextFormField(
-                    controller: password,
+                    controller: authProvider.password,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Password",
@@ -83,24 +87,17 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(10),
               child: GestureDetector(
                 onTap: ()async{
-                  try {
-                    print("email "+email.text.trim());
-                    print("password "+password.text.trim());
-                    await _auth.signInWithEmailAndPassword(email: email.text.trim(), password: password.text.trim());
-                    print("success");
-                    changeScreenReplacement(context, Home());
+                  if(!await authProvider.signIn()){
+                    _key.currentState.showSnackBar(
+                      SnackBar(content: Text("Login failed!"))
+                    );
+                    return;
                   }
-                  on FirebaseAuthException catch (e) {
-                    if (e.code == 'weak-password') {
-                      print('The password provided is too weak.');
-                    } else if (e.code == 'email-already-in-use') {
-                      print('The account already exists for that email.');
-                    }
-                  }
-                  catch (e) {
-                    print(e);
-                  }
-
+                  categoryProvider.loadCategories();
+                  restaurantProvider.loadSingleRestaurant();
+                  productProvider.loadProducts();
+                  authProvider.clearController();
+                  changeScreenReplacement(context, Home());
                 },
                 child: Container(
                   decoration: BoxDecoration(
