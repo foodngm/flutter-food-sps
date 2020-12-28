@@ -21,11 +21,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("LoginScreen");
     final authProvider = Provider.of<UserProvider>(context);
     final categoryProvider = Provider.of<CategoryProvider>(context);
-    final restaurantProvider = Provider.of<RestaurantProvider>(context);
-    final productProvider = Provider.of<ProductProvider>(context);
-
+//    final restaurantProvider = Provider.of<RestaurantProvider>(context);
+//    final productProvider = Provider.of<ProductProvider>(context);
+    print("authProvider ");
     return Scaffold(
       key: _key,
       backgroundColor: white,
@@ -94,8 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     return;
                   }
                   categoryProvider.loadCategories();
-                  restaurantProvider.loadSingleRestaurant();
-                  productProvider.loadProducts();
+               //   restaurantProvider.loadSingleRestaurant();
+               //   productProvider.loadProducts();
                   authProvider.clearController();
                   changeScreenReplacement(context, Home());
                 },

@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 
 import 'src/screens/splash.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: AppProvider()),
@@ -30,12 +31,11 @@ void main()async {
           home: ScreensController())));
 }
 
-
-
 class ScreensController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<UserProvider>(context);
+    print('status ' + auth.status.toString());
     switch (auth.status) {
       case Status.Uninitialized:
         return Splash();
@@ -49,5 +49,3 @@ class ScreensController extends StatelessWidget {
     }
   }
 }
-
-

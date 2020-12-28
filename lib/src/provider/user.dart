@@ -16,9 +16,9 @@ enum Status{Uninitialized, Authenticated, Authenticating, Unauthenticated}
 
 class UserProvider with ChangeNotifier{
   FirebaseAuth _auth;
-  FirebaseUser _user;
+  User _user;
   Status _status = Status.Uninitialized;
-  Firestore _firestore = Firestore.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   UserServices _userServicse = UserServices();
   OrderServices _orderServices = OrderServices();
   UserModel _userModel;
@@ -26,7 +26,7 @@ class UserProvider with ChangeNotifier{
 //  getter
   UserModel get userModel => _userModel;
   Status get status => _status;
-  FirebaseUser get user => _user;
+  User get user => _user;
 
   // public variables
   List<OrderModel> orders = [];
@@ -39,16 +39,26 @@ class UserProvider with ChangeNotifier{
 
 
   UserProvider.initialize(): _auth = FirebaseAuth.instance{
-    _auth.onAuthStateChanged.listen(_onStateChanged);
+    _auth.authStateChanges().listen((firebaseUser){
+      print("authStateChanges 1");
+      _onStateChanged(firebaseUser);
+    });
   }
 
+
   Future<bool> signIn()async{
+    print('signIn');
+    print(email.text.trim());
+    print(password.text.trim());
     try{
       _status = Status.Authenticating;
       notifyListeners();
       await _auth.signInWithEmailAndPassword(email: email.text.trim(), password: password.text.trim());
+      print("success");
+      reloadUserModel();
       return true;
     }catch(e){
+      print('error : '+e.toString());
       _status = Status.Unauthenticated;
       notifyListeners();
       print(e.toString());
@@ -94,11 +104,12 @@ class UserProvider with ChangeNotifier{
 
   Future<void> reloadUserModel()async{
     _userModel = await _userServicse.getUserById(user.uid);
-    notifyListeners();
+    //notifyListeners();
   }
 
 
-  Future<void> _onStateChanged(FirebaseUser firebaseUser) async{
+  Future<void> _onStateChanged(User firebaseUser) async{
+    print("_onStateChanged 2");
     if(firebaseUser == null){
       _status = Status.Unauthenticated;
     }else{

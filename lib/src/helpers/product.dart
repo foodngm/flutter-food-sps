@@ -3,7 +3,7 @@ import '../models/products.dart';
 
 class ProductServices {
   String collection = "products";
-  Firestore _firestore = Firestore.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<ProductModel>> getProducts() async =>
       _firestore.collection(collection).getDocuments().then((result) {

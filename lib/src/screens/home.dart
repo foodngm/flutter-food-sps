@@ -31,8 +31,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
-    print("XXXXX");
-    print(user.email);
     final app = Provider.of<AppProvider>(context);
     final categoryProvider = Provider.of<CategoryProvider>(context);
     final restaurantProvider = Provider.of<RestaurantProvider>(context);
@@ -66,15 +64,12 @@ class _HomeState extends State<Home> {
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: primary),
               accountName: CustomText(
-                text: user.userModel?.name ?? "username lading...",
+                text: user.user?.email?? "Loading email ...",
                 color: white,
                 weight: FontWeight.bold,
                 size: 18,
               ),
-              accountEmail: CustomText(
-                text: user.userModel?.email ?? "email loading...",
-                color: white,
-              ),
+
             ),
             ListTile(
               onTap: () {
@@ -255,7 +250,7 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-                  Column(
+                 Column(
                     children: restaurantProvider.restaurants
                         .map((item) => GestureDetector(
                               onTap: () async {

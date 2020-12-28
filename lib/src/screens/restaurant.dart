@@ -61,7 +61,7 @@ class RestaurantScreen extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
-
+                            colors: [grey, black]
 
                         )),
                   ),

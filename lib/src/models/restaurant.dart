@@ -8,7 +8,6 @@ class RestaurantModel {
   static const RATES = "rates";
   static const IMAGE = "image";
   static const POPULAR = "popular";
-  static const USER_LIKES = "userLikes";
 
 
 
@@ -16,8 +15,8 @@ class RestaurantModel {
   String _name;
   String _image;
   List<String> _userLikes;
-  double _rating;
-  double _avgPrice;
+  int _rating;
+  int _avgPrice;
   bool _popular;
   int _rates;
 
@@ -30,9 +29,9 @@ class RestaurantModel {
 
   List<String> get userLikes => _userLikes;
 
-  double get avgPrice => _avgPrice;
+  int get avgPrice => _avgPrice;
 
-  double get rating => _rating;
+  int get rating => _rating;
 
   bool get popular => _popular;
 
@@ -43,12 +42,34 @@ class RestaurantModel {
 
 
   RestaurantModel.fromSnapshot(DocumentSnapshot snapshot) {
-    _id = snapshot.data[ID];
-    _name = snapshot.data[NAME];
-    _image = snapshot.data[IMAGE];
-    _avgPrice = snapshot.data[AVG_PRICE];
-    _rating = snapshot.data[RATING];
-    _popular = snapshot.data[POPULAR];
-    _rates = snapshot.data[RATES];
+    if(!snapshot.exists) {
+      _id = "";
+      _name = "";
+      _image =  "";
+      _avgPrice =  0;
+      _rating =  0;
+      _popular = false;
+      _rates = 0;
+    }else{
+      _id = snapshot.get(ID);
+      _name = snapshot.get(NAME);
+      _image = snapshot.get(IMAGE);
+      _avgPrice = snapshot.get(AVG_PRICE);
+      _rating = snapshot.get(RATING);
+      _popular = snapshot.get(POPULAR);
+      _rates = snapshot.get(RATES);
+    }
+
+  }
+
+  RestaurantModel.fromQuerySnapshot(QuerySnapshot snapshot) {
+    QueryDocumentSnapshot doc =  snapshot.docs.first;
+    _id = doc.get(ID);
+    _name = doc.get(NAME);
+    _image = doc.get(IMAGE);
+    _avgPrice = doc.get(AVG_PRICE);
+    _rating = doc.get(RATING);
+    _popular = doc.get(POPULAR);
+    _rates = doc.get(RATES);
   }
 }

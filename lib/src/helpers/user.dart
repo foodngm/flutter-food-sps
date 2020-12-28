@@ -3,11 +3,11 @@ import 'package:food_ngm/src/models/cart_item.dart';
 import 'package:food_ngm/src/models/user.dart';
 class UserServices{
   String collection = "users";
-  Firestore _firestore = Firestore.instance;
+ FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void createUser(Map<String, dynamic> values) {
     String id = values["id"];
-    _firestore.collection(collection).document(id).setData(values);
+    _firestore.collection(collection).add(values);
   }
 
   void updateUserData(Map<String, dynamic> values){
@@ -33,6 +33,7 @@ class UserServices{
 
 
   Future<UserModel> getUserById(String id) => _firestore.collection(collection).document(id).get().then((doc){
+    print("gettUserById");
     return UserModel.fromSnapshot(doc);
   });
 }

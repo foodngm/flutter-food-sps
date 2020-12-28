@@ -24,17 +24,19 @@ class CategoryWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
                 child: Stack(
                   children: <Widget>[
-                    Positioned.fill(child: Align(
+                    Positioned.fill(
+                        child: Align(
                       alignment: Alignment.center,
                       child: Loading(),
                     )),
                     Center(
-                      child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: category.image),
+                      child: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: category.image),
                     )
                   ],
                 )),
           ),
-
           Container(
             width: 140,
             height: 160,
@@ -44,16 +46,19 @@ class CategoryWidget extends StatelessWidget {
                   bottomRight: Radius.circular(30),
                 ),
                 gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-
-                )),
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [primary, primary])),
           ),
-
           Positioned.fill(
               child: Align(
                   alignment: Alignment.center,
-                  child: CustomText(text: category.name, color: white, size: 26, weight: FontWeight.w300,)))
+                  child: CustomText(
+                    text: category.name,
+                    color: white,
+                    size: 26,
+                    weight: FontWeight.w300,
+                  )))
         ],
       ),
     );

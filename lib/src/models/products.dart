@@ -15,27 +15,27 @@ class ProductModel {
   static const USER_LIKES = "userLikes";
 
 
-  String _id;
+  int _id;
   String _name;
-  String _restaurantId;
+  int _restaurantId;
   String _restaurant;
   String _category;
   String _image;
   String _description;
 
-  double _rating;
+  int _rating;
   int _price;
   int _rates;
 
   bool _featured;
 
-  String get id => _id;
+  int get id => _id;
 
   String get name => _name;
 
   String get restaurant => _restaurant;
 
-  String get restaurantId => _restaurantId;
+  int get restaurantId => _restaurantId;
 
   String get category => _category;
 
@@ -45,7 +45,7 @@ class ProductModel {
 
 
 
-  double get rating => _rating;
+  int get rating => _rating;
 
   int get price => _price;
 
@@ -57,17 +57,17 @@ class ProductModel {
   bool liked = false;
 
   ProductModel.fromSnapshot(DocumentSnapshot snapshot) {
-    _id = snapshot.data[ID];
-    _image = snapshot.data[IMAGE];
-    _restaurant = snapshot.data[RESTAURANT];
-    _restaurantId = snapshot.data[RESTAURANT_ID].toString();
-    _description = snapshot.data[DESCRIPTION];
-    _id = snapshot.data[ID];
-    _featured = snapshot.data[FEATURED];
-    _price = snapshot.data[PRICE].floor();
-    _category = snapshot.data[CATEGORY];
-    _rating = snapshot.data[RATING];
-    _rates = snapshot.data[RATES];
-    _name = snapshot.data[NAME];
+    _id = snapshot.get(ID);
+    _image = snapshot.get(IMAGE);
+    _restaurant = snapshot.get(RESTAURANT);
+    _restaurantId = snapshot.get(RESTAURANT_ID);
+    _description = snapshot.get(DESCRIPTION);
+    _id = snapshot.get(ID);
+    _featured = snapshot.get(FEATURED);
+    _price = snapshot.get(PRICE).floor();
+    _category = snapshot.get(CATEGORY);
+    _rating = snapshot.get(RATING);
+    _rates = snapshot.get(RATES);
+    _name = snapshot.get(NAME);
   }
 }

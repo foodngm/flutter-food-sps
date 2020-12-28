@@ -3,8 +3,7 @@ import '../models/restaurant.dart';
 
 class RestaurantServices {
   String collection = "restaurants";
-  Firestore _firestore = Firestore.instance;
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<List<RestaurantModel>> getRestaurants() async =>
       _firestore.collection(collection).getDocuments().then((result) {
         List<RestaurantModel> restaurants = [];
@@ -15,6 +14,8 @@ class RestaurantServices {
       });
 
   Future<RestaurantModel> getRestaurantById({String id}) => _firestore.collection(collection).document(id.toString()).get().then((doc){
+  //Future<RestaurantModel> getRestaurantById(String id) => _firestore.collection(collection).where('id',isEqualTo: id.toString()).get().then((doc){
+
     return RestaurantModel.fromSnapshot(doc);
   });
 

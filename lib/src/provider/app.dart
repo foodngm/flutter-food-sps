@@ -1,8 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 enum SearchBy{PRODUCTS, RESTAURANTS}
 
 class AppProvider with ChangeNotifier{
+
+
+
   bool isLoading = false;
   SearchBy search = SearchBy.PRODUCTS;
   String filterBy = "Products";

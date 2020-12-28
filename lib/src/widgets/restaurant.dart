@@ -63,7 +63,7 @@ class RestaurantWidget extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-
+                          colors: [primary, primary]
                       )),
                 ),
               )),
@@ -83,12 +83,12 @@ class RestaurantWidget extends StatelessWidget {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold)),
                           TextSpan(
-                              text: "avg meal price: ",
+                              text: "ราคาเฉลี่ย : ",
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w300)),
                           TextSpan(
-                              text: "\$${restaurant.avgPrice} \n",
+                              text: "\฿${restaurant.avgPrice} \n",
                               style: TextStyle(fontSize: 16)),
                         ], style: TextStyle(color: white)),
                       ),

@@ -4,7 +4,7 @@ import 'package:food_ngm/src/models/order.dart';
 
 class OrderServices{
   String collection = "orders";
-  Firestore _firestore = Firestore.instance;
+ FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void createOrder({String userId ,String id,String description,String status ,List<CartItemModel> cart, int totalPrice}) {
    List<Map> convertedCart = [];

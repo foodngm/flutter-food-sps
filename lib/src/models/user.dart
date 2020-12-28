@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_ngm/src/models/cart_item.dart';
 
 class UserModel{
-  static const ID = "id";
+  static const ID = "uid";
   static const NAME = "name";
   static const EMAIL = "email";
   static const STRIPE_ID = "stripeId";
@@ -29,12 +29,12 @@ class UserModel{
   int totalCartPrice;
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot){
-    _name = snapshot.data[NAME];
-      _email = snapshot.data[EMAIL];
-    _id = snapshot.data[ID];
-    _stripeId = snapshot.data[STRIPE_ID];
-    cart = _convertCartItems(snapshot.data[CART]) ?? [];
-    totalCartPrice = snapshot.data[CART] == null ? 0 :getTotalPrice(cart: snapshot.data[CART]);
+    _name = snapshot.get(NAME);
+    _email = snapshot.get(EMAIL);
+    _id = snapshot.get(ID);
+    _stripeId = snapshot.get(STRIPE_ID);
+    cart = _convertCartItems(snapshot.get(CART)) ?? [];
+    totalCartPrice = snapshot.get(CART) == null ? 0 :getTotalPrice(cart: snapshot.get(CART));
   }
 
   int getTotalPrice({List cart}){

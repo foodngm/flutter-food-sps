@@ -17,8 +17,8 @@ class CategoryModel {
   String get image => _image;
 
   CategoryModel.fromSnapshot(DocumentSnapshot snapshot){
-    _id = snapshot.data[ID];
-    _name = snapshot.data[NAME];
-    _image = snapshot.data[IMAGE];
+    _id = snapshot.get(ID);
+    _name = snapshot.get(NAME);
+    _image = snapshot.get(IMAGE);
   }
 }
