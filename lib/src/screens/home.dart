@@ -192,7 +192,7 @@ class _HomeState extends State<Home> {
                     height: 10,
                   ),
                   Container(
-                    height: 100,
+                    height: 120,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: categoryProvider.categories.length,

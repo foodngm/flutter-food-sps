@@ -13,7 +13,7 @@ class CategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+   /* return Padding(
       padding: const EdgeInsets.all(6),
       child: Stack(
         children: <Widget>[
@@ -59,6 +59,32 @@ class CategoryWidget extends StatelessWidget {
                     size: 26,
                     weight: FontWeight.w300,
                   )))
+        ],
+      ),
+    );*/
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Container(
+              width: 50,
+              height: 60,
+
+              child: Padding(
+                padding: EdgeInsets.all(4),
+                child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: category.image),
+              )),
+          SizedBox(
+            height: 2,
+          ),
+          CustomText(
+            text: category.name,
+            size: 14,
+            color: black,
+            weight: FontWeight.bold,
+          )
         ],
       ),
     );
